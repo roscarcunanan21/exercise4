@@ -1,0 +1,76 @@
+Findings:
+
+machine used:
+Windows 10 Professional 17134.165
+core i7 3770
+8gb memory
+HDD storage
+
+1. csv_reader_method.py
+This is the method i will use to verify the results in the other methods because I believe this is the most accurate because it does not use any 3rd party library.
+It works by using python csv reader to read the send list, and then initializing the block list as a string, going through each line in the csv reader from the send list and if that does not exist in the block list string, write them to a csv.
+Console print:
+C:\Users\ROSCAR-DESKTOP-I7\AppData\Local\Programs\Python\Python37>python csv_reader_method.py
+double csv filtering using csv method1 method
+start time is 1531764516.9336784
+Done getting csv data from send list in 0.0029981136322021484 seconds
+Total execution time: 8530.235122919083 seconds
+
+The resulting file above has a lot of duplicates but because it took a lot of time to process, i tested 2 different ways to remove the duplicates:
+	1a. duplicate_removal_panda.py
+	I used this to remove duplicates from a single file using the python panda library. It casts the csv data into a dataframe list, removes the duplicates using its builtin drop_duplicates method and writes it into a csv file.
+	Console print:
+	C:\Users\ROSCAR-DESKTOP-I7\AppData\Local\Programs\Python\Python37>python duplicate_removal_panda.py
+	removing duplicates
+	start time is 1531797307.2760754
+	Done extracting dataframe from source list in 10.798345804214478 seconds
+	Done removing duplicates in source list in 0.5766465663909912 seconds
+	Done writing to csv in 6.193183660507202 seconds
+	Total execution time: 17.56817603111267 seconds
+
+	1b. duplicate_removal_nonpanda.py
+	This is another test to remove duplicates from a single file using python builtin methods. We open the file using the python open method, go through each line and write it to a new file before adding it to a set, and if the current line already exists in the set, skip it.
+	Console print:
+	C:\Users\ROSCAR-DESKTOP-I7\AppData\Local\Programs\Python\Python37>python duplicate_removal_nonpanda.py
+	removing duplicates
+	start time is 1531798791.6899552
+	Total execution time: 5.386681079864502 seconds
+
+
+2. pandas-method.py
+This method uses the panda python library. It works by getting a dataframe of both csvs, casting them into lists and has a syntax for removing objects from one list that exist in the other. It also has a builtin method for removing duplicates. I am getting the same number of lines from the 1st method so I assume the result here is correct.
+Console print:
+C:\Users\ROSCAR-DESKTOP-I7\AppData\Local\Programs\Python\Python37>python pandas_method.py
+double csv filtering using python pandas method
+start time is 1531761707.0659366
+Done extracting dataframe from send list in 9.884507656097412 seconds
+Done extracting dataframe from block list in 3.2665927410125732 seconds
+Done removing block list entries from send list in 1.8551042079925537 seconds
+Done removing duplicates in combine list in 0.5306916236877441 seconds
+Done writing to csv in 6.233809471130371 seconds
+Total execution time: 21.771703720092773 seconds
+
+3. pandas-method2.py
+This method also uses the panda python library but has a different approach. For each of the csvs, it gets the csv object using panda's read_csv method, casting it to a set. We then subtract one set from the other, and write the resulting set to a new csv. we then use panda again to read the csv, remove duplicates and write to a final csv.
+The resulting csv has more entries than the block list and less entries than the send list BUT they do not have the same number of results as my benchmark method above. However, the script works fast. I am just writing it here for documentation.
+Console print:
+C:\Users\ROSCAR-DESKTOP-I7\AppData\Local\Programs\Python\Python37>python pandas_method2.py
+double csv filtering using python pandas method 2
+start time is 1531761665.8476684
+sys:1: DtypeWarning: Columns (0) have mixed types. Specify dtype option on import or set low_memory=False.
+Done extracting casting the csv files to sets in 3.1691505908966064 seconds
+Done getting the difference between sets in 0.3840467929840088 seconds
+Done writing to csv in 4.935011625289917 seconds
+Done removing duplicates in 21.002626419067383 seconds
+Total execution time: 29.490835428237915 seconds
+
+3. csv_filter.php
+This method uses php to cast both source csv's contents into separate arrays, get the difference between the arrays, make the resulting array's elements unique to remove duplicates, and writing to a file. This took just 14 seconds. Note: this requires the server to have more than 2gb of memory allocated for apache or whatever php engine you use.
+Console print:
+c:\xampp\htdocs>php csv_filter.php
+processing 2 csv file filtering using php
+start time: 1531803418
+Done appending 2 source csvs into separate arrays in 0 seconds.
+Done getting difference between 2 csvs in 0 seconds.
+Done removing duplicates and writing results to new csv in 14 seconds.
+Total Execution time: 14 seconds
