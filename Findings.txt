@@ -65,7 +65,7 @@ Done removing duplicates in 21.002626419067383 seconds
 Total execution time: 29.490835428237915 seconds
 
 3. csv_filter.php
-This method uses php to cast both source csv's contents into separate arrays, get the difference between the arrays, make the resulting array's elements unique to remove duplicates, and writing to a file. This took just 14 seconds. Note: this requires the server to have more than 2gb of memory allocated for apache or whatever php engine you use.
+This method uses php to cast both source csv's contents into separate arrays, get the difference between the arrays, make the resulting array's elements unique to remove duplicates, and writing to a file. This took just 14 seconds. Note: this requires the server to have close to 2gb of memory allocated for apache or whatever php engine you use.
 Console print:
 c:\xampp\htdocs>php csv_filter.php
 processing 2 csv file filtering using php
